@@ -26,7 +26,6 @@ public class Aluno{
 	private String cpf;
 	
 	@Column(name="dt_nascimento")
-	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dt_nascimento;
 
 	public long getId() {
