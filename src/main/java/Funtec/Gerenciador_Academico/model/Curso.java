@@ -1,5 +1,9 @@
 package Funtec.Gerenciador_Academico.model;
 
+import java.time.DayOfWeek;
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +30,15 @@ public class Curso {
 
     @Column(name = "carga_horaria_diaria")
     private  double carga_horaria_diaria;
+    
+    @Column(name = "dt_inicio")
+    private Date dt_inicio;
+    
+    @Column(name = "dt_final")
+    private Date dt_final;
+    
+    @Column(name = "dias_de_curso")
+    private List<DayOfWeek> dias_de_curso;
 
     public long getId() {
         return id;
@@ -66,5 +79,33 @@ public class Curso {
     public void setCarga_horaria_diaria(double carga_horaria_diaria) {
         this.carga_horaria_diaria = carga_horaria_diaria;
     }
+
+	public Date getDt_inicio() {
+		return dt_inicio;
+	}
+
+	public void setDt_inicio(Date dt_inicio) {
+		this.dt_inicio = dt_inicio;
+	}
+
+	public Date getDt_final() {
+		return dt_final;
+	}
+
+	public void setDt_final(Date dt_final) {
+		this.dt_final = dt_final;
+	}
+
+	public List<DayOfWeek> getDias_de_curso() {
+		return dias_de_curso;
+	}
+
+	public void setDias_de_curso(List<DayOfWeek> dias_de_curso) {
+		this.dias_de_curso = dias_de_curso;
+	}
+	
+	
+    
+    
 
 }

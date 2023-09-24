@@ -28,7 +28,7 @@ public class ProfessorController {
     @Autowired
     ProfessorRepository professorRepository;
 
-    @GetMapping("/professor")
+    @GetMapping("/professores")
     public List<Professor> getAllProfessores()
     {
 
@@ -36,7 +36,7 @@ public class ProfessorController {
 
     }
 
-    @PostMapping("/professor")
+    @PostMapping("/professores")
     public Professor cadastrarProfessor(@RequestBody Professor professor)
     {
 
@@ -44,7 +44,7 @@ public class ProfessorController {
 
     }
 
-    @GetMapping("/professor/{id}")
+    @GetMapping("/professores/{id}")
     public ResponseEntity<Professor> getProfessorById(@PathVariable Long id)
 	{
 		Professor professor = professorRepository.findById(id)
@@ -53,7 +53,7 @@ public class ProfessorController {
 		return ResponseEntity.ok(professor);
 	}
 
-    @PutMapping("/professor/{id}")
+    @PutMapping("/professores/{id}")
 	public ResponseEntity<Professor> updateProfessor(@PathVariable Long id, @RequestBody Professor professorDetails)
 	{
 		Professor professor = professorRepository.findById(id)
@@ -70,7 +70,7 @@ public class ProfessorController {
 		return ResponseEntity.ok(professorAtualdizado);
 	}
 
-    @DeleteMapping("/professor/{id}")
+    @DeleteMapping("/professores/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteProfessor(@PathVariable Long id)
 	{
 		Professor professor = professorRepository.findById(id)
