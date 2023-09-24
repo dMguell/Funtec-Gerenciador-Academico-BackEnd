@@ -1,6 +1,7 @@
 package Funtec.Gerenciador_Academico.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -26,7 +27,7 @@ public class Aluno{
 	private String cpf;
 	
 	@Column(name="dt_nascimento")
-	private LocalDate dt_nascimento;
+	private Date dt_nascimento;
 
 	public long getId() {
 		return id;
@@ -52,11 +53,11 @@ public class Aluno{
 		this.cpf = cpf;
 	}
 
-	public LocalDate getDt_nascimento() {
+	public Date getDt_nascimento() {
 		return dt_nascimento;
 	}
 
-	public void setDt_nascimento(LocalDate dt_nascimento) {
+	public void setDt_nascimento(Date dt_nascimento) {
 		this.dt_nascimento = dt_nascimento;
 	}
 	
