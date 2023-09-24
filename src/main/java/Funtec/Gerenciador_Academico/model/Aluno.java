@@ -1,10 +1,6 @@
 package Funtec.Gerenciador_Academico.model;
 
-import java.time.LocalDate;
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,20 +9,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Alunos")
-public class Aluno{
+@Table(name = "Alunos")
+public class Aluno {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@Column(name="nome_aluno")
+
+	@Column(name = "nome_aluno")
 	private String nome;
-	
-	@Column(name="cpf")
+
+	@Column(name = "cpf")
 	private String cpf;
-	
-	@Column(name="dt_nascimento")
+
+	@Column(name = "dt_nascimento")
 	private Date dt_nascimento;
 
 	public long getId() {
@@ -60,7 +56,5 @@ public class Aluno{
 	public void setDt_nascimento(Date dt_nascimento) {
 		this.dt_nascimento = dt_nascimento;
 	}
-	
-	
-	
+
 }
