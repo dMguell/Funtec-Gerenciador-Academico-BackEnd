@@ -1,11 +1,16 @@
 package Funtec.Gerenciador_Academico.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +29,21 @@ public class Aluno {
 
 	@Column(name = "dt_nascimento")
 	private Date dt_nascimento;
+	
+	@OneToMany(mappedBy = "aluno",
+			   cascade = CascadeType.ALL,
+			   orphanRemoval = true)
+	private List<Chamada> turmas = new ArrayList<Chamada>();
+	
+	
+
+	public List<Chamada> getTurmas() {
+		return turmas;
+	}
+
+	public void setTurmas(List<Chamada> turmas) {
+		this.turmas = turmas;
+	}
 
 	public long getId() {
 		return id;
