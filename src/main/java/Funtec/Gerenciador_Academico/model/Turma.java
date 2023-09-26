@@ -31,9 +31,6 @@ public class Turma {
 			   cascade = CascadeType.ALL,
 			   orphanRemoval = true)
 	private List<Chamada> alunos = new ArrayList<Chamada>();
-	
-	
-
 
 	public List<Chamada> getAlunos() {
 		return alunos;

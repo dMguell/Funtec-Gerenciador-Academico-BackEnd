@@ -33,8 +33,6 @@ public class Professor {
     		   cascade = CascadeType.ALL)
     private List<Turma> turmas = new ArrayList<Turma>();
     
-    
-
     public List<Turma> getTurmas() {
 		return turmas;
 	}
