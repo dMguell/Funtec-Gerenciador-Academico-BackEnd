@@ -36,8 +36,6 @@ public class Professor {
     @JsonIgnore
     private List<Turma> turmas = new ArrayList<Turma>();
     
-    
-
     public List<Turma> getTurmas() {
 		return turmas;
 	}
