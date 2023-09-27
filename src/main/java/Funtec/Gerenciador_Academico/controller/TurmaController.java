@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Funtec.Gerenciador_Academico.Exception.ResourceNotFoundException;
-import Funtec.Gerenciador_Academico.model.Aluno;
 import Funtec.Gerenciador_Academico.model.Curso;
 import Funtec.Gerenciador_Academico.model.Professor;
 import Funtec.Gerenciador_Academico.model.Turma;
@@ -40,21 +39,19 @@ public class TurmaController {
 	ProfessorRepository professorRepository;
 
 	@GetMapping("/turmas")
-	public List<Turma> getAllTurmas() 
-	{
+	public List<Turma> getAllTurmas() {
 		return turmaRepository.findAll();
 
 	}
 
 	@GetMapping("/turmas/{id}")
-	public ResponseEntity<Turma> getTurmaById(@PathVariable Long id)
-	{
+	public ResponseEntity<Turma> getTurmaById(@PathVariable Long id) {
 		Turma turma = turmaRepository.findById(id)
-							.orElseThrow(() -> new ResourceNotFoundException("Turma não existe com este id: " + id));
-		
+				.orElseThrow(() -> new ResourceNotFoundException("Turma não existe com este id: " + id));
+
 		return ResponseEntity.ok(turma);
 	}
-	
+
 	@PostMapping("/turmas/{idCurso}/{idProfessor}")
 	public Turma cadastrarTurma(@PathVariable long idCurso,
 			@PathVariable long idProfessor) {
