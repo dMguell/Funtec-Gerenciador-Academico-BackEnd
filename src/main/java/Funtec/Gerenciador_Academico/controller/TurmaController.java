@@ -1,6 +1,5 @@
 package Funtec.Gerenciador_Academico.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,70 +28,64 @@ import Funtec.Gerenciador_Academico.repository.TurmaRepository;
 @RestController
 @RequestMapping("/api")
 public class TurmaController {
-	
+
 	@Autowired
 	TurmaRepository turmaRepository;
-	
+
 	@Autowired
 	CursoRepository cursoRepository;
-	
+
 	@Autowired
 	ProfessorRepository professorRepository;
-	
+
 	@GetMapping("/turmas")
-	public List<Turma> getAllTurmas()
-	{
+	public List<Turma> getAllTurmas() {
 		return turmaRepository.findAll();
-		
+
 	}
-	
+
 	@PostMapping("/turmas/{idCurso}/{idProfessor}")
 	public Turma cadastrarTurma(@PathVariable long idCurso,
-								@PathVariable long idProfessor)
-	{
+			@PathVariable long idProfessor) {
 		Curso curso = cursoRepository.findById(idCurso)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi encontrado curso com este id"));
-		
+
 		Professor professor = professorRepository.findById(idProfessor)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi encontrado professor com este id"));
-		
+
 		Turma turma = new Turma();
 		turma.setCurso(curso);
 		turma.setProfessor(professor);
-		
+
 		return turmaRepository.save(turma);
 	}
-	
+
 	@PutMapping("/turmas/{id}")
-	public ResponseEntity<Turma> updateCurso(@PathVariable Long id, @RequestBody Turma turmaDetails)
-	{
+	public ResponseEntity<Turma> updateCurso(@PathVariable Long id, @RequestBody Turma turmaDetails) {
 		Turma turma = turmaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Turma não existe com este id: " + id));
-		
+
 		turma.setAlunos(turmaDetails.getAlunos());
 		turma.setCurso(turmaDetails.getCurso());
 		turma.setProfessor(turmaDetails.getProfessor());
-		
+
 		Turma turmaAtualizada = turmaRepository.save(turma);
-		
+
 		return ResponseEntity.ok(turmaAtualizada);
-		
+
 	}
-	
+
 	@DeleteMapping("/turmas/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteTurma(@PathVariable Long id)
-	{
+	public ResponseEntity<Map<String, Boolean>> deleteTurma(@PathVariable Long id) {
 		Turma turma = turmaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Turma não existe com este id: " + id));
-		
+
 		turmaRepository.delete(turma);
-		
+
 		Map<String, Boolean> response = new HashMap<String, Boolean>();
 		response.put("deletado", Boolean.TRUE);
-		
+
 		return ResponseEntity.ok(response);
 	}
-	
-	
 
 }

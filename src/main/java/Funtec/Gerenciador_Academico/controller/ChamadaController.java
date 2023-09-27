@@ -21,57 +21,53 @@ import Funtec.Gerenciador_Academico.model.ChamadaId;
 import Funtec.Gerenciador_Academico.model.Turma;
 import Funtec.Gerenciador_Academico.repository.AlunoRepository;
 import Funtec.Gerenciador_Academico.repository.ChamadaRepository;
-import Funtec.Gerenciador_Academico.repository.CursoRepository;
 import Funtec.Gerenciador_Academico.repository.TurmaRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class ChamadaController {
-	
+
 	@Autowired
 	ChamadaRepository chamadaRepository;
 
 	@Autowired
 	TurmaRepository turmaRepository;
-	
+
 	@Autowired
 	AlunoRepository alunoRepository;
-	
+
 	@GetMapping("/chamadas")
-	public List<Chamada> getAllChamadas()
-	{
+	public List<Chamada> getAllChamadas() {
 		return chamadaRepository.findAll();
 	}
-	
+
 	@PostMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public Chamada cadastrarChamada(@PathVariable long idTurma,
-									@PathVariable long idAluno,
-									@PathVariable String dt_chamada,
-									@RequestBody Chamada chamadaBody) throws ParseException
-	{
+			@PathVariable long idAluno,
+			@PathVariable String dt_chamada,
+			@RequestBody Chamada chamadaBody) throws ParseException {
 		Turma turma = turmaRepository.findById(idTurma)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi possível encontrar a turma com este id"));
-		
+
 		Aluno aluno = alunoRepository.findById(idAluno)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi possível encontrar aluno com este id"));
-		
+
 		ChamadaId chamadaid = new ChamadaId();
 		chamadaid.setAlunoId(aluno.getId());
 		chamadaid.setTurmaId(turma.getId());
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		
+
 		Date data = formatter.parse(dt_chamada);
 		chamadaid.setDt_chamada(data);
 
-		
 		Chamada chamada = new Chamada();
-		
+
 		chamada.setId(chamadaid);
 		chamada.setAluno(aluno);
 		chamada.setTurma(turma);
 		chamada.setPresenca(chamadaBody.getPresenca());
 		return chamadaRepository.save(chamada);
-		
+
 	}
 }
