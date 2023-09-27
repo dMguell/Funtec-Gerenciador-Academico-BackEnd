@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,9 +47,18 @@ public class Curso {
     
     @OneToMany(mappedBy = "curso",
     		   cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Turma> turmas = new ArrayList<Turma>();
+    
+    public List<Turma> getTurmas() {
+		return turmas;
+	}
 
-    public long getId() {
+	public void setTurmas(List<Turma> turmas) {
+		this.turmas = turmas;
+	}
+
+	public long getId() {
         return id;
     }
 

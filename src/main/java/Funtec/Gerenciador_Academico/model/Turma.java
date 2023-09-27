@@ -3,7 +3,12 @@ package Funtec.Gerenciador_Academico.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,10 +35,8 @@ public class Turma {
 	@OneToMany(mappedBy = "turma",
 			   cascade = CascadeType.ALL,
 			   orphanRemoval = true)
+	@JsonIgnore
 	private List<Chamada> alunos = new ArrayList<Chamada>();
-	
-	
-
 
 	public List<Chamada> getAlunos() {
 		return alunos;
@@ -42,7 +45,8 @@ public class Turma {
 	public void setAlunos(List<Chamada> alunos) {
 		this.alunos = alunos;
 	}
-
+     
+	
 	public long getId() {
 		return id;
 	}

@@ -3,6 +3,8 @@ package Funtec.Gerenciador_Academico.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +33,7 @@ public class Professor {
     
     @OneToMany(mappedBy = "professor",
     		   cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Turma> turmas = new ArrayList<Turma>();
     
     

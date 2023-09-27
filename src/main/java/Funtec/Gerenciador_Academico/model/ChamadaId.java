@@ -18,7 +18,6 @@ public class ChamadaId  implements Serializable{
 	@Column(name = "dt_chamada")
 	private Date dt_chamada;
 	
-
 	public Date getDt_chamada() {
 		return dt_chamada;
 	}

@@ -1,5 +1,6 @@
 package Funtec.Gerenciador_Academico.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +23,16 @@ public class Chamada {
 	@MapsId("alunoId")
 	private Aluno aluno;
 	
+	@Column(name = "presenca")
+	private Integer presenca;
+
+	public Integer getPresenca() {
+		return presenca;
+	}
+
+	public void setPresenca(Integer presenca) {
+		this.presenca = presenca;
+	}
 
 	public ChamadaId getId() {
 		return id;
