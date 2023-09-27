@@ -46,6 +46,15 @@ public class ChamadaController {
 	public List<Chamada> getAllChamadas() {
 		return chamadaRepository.findAll();
 	}
+	
+	@GetMapping("/chamadas/{id}")
+	public ResponseEntity<Chamada> getChamadaById(@PathVariable Long id)
+	{
+		Chamada chamada = chamadaRepository.findById(id)
+							.orElseThrow(() -> new ResourceNotFoundException("Chamada não existe com este id: " + id));
+		
+		return ResponseEntity.ok(chamada);
+	}
 
 	@PostMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public Chamada cadastrarChamada(@PathVariable long idTurma,
