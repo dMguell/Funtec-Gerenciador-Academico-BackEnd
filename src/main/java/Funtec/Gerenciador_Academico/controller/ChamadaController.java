@@ -1,10 +1,12 @@
 package Funtec.Gerenciador_Academico.controller;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,21 +56,25 @@ public class ChamadaController {
 												  @PathVariable long idAluno,
 												  @PathVariable String dt_chamada) throws ParseException 
 	{
+		String dataSpliced = dt_chamada.substring(0,19);
+	
+		DateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy:HH:mm:ss");
-		Date data = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss").parse(dt_chamada);
-		String formatado = formatter.format(dt_chamada);
+		Date data = new Date();
+		data = formato.parse(dataSpliced);
 		
-		System.out.println("\n\n\n DATA NAO FORMATADA: " + formatado + "\n\n\n");
+		String teste = formatoString.format(data);
 		
 		ChamadaId chamadaId = new ChamadaId();
 		chamadaId.setTurmaId(idTurma);
 		chamadaId.setAlunoId(idAluno);
-		//chamadaId.setDt_chamada(dt_chamada);
+		chamadaId.setDt_chamada(data);
 		
 		
-		String naturalId = "" + idTurma + idAluno + formatado;
-		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n");
+		
+		String naturalId = "" + idTurma + idAluno + teste;
+		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n DATA: " + teste + "\n\n\n");
 	
 		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 		
@@ -104,7 +110,7 @@ public class ChamadaController {
 		chamada.setTurma(turma);
 		chamada.setPresenca(chamadaBody.getPresenca());
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy:HH:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		
 		
 		String formatado = formatter.format(dt_chamada);
@@ -117,12 +123,11 @@ public class ChamadaController {
 
 	}
 	
-	/*
-	@PutMapping("/chamadas/{id}")
-	public ResponseEntity<Chamada> updateCurso(@PathVariable ChamadaId id, @RequestBody Chamada chamadaDetails) {
+	
+	@PutMapping("/chamadas/{naturalId}")
+	public ResponseEntity<Chamada> updateCurso(@PathVariable String naturalId, @RequestBody Chamada chamadaDetails) {
 
-			Chamada chamada = chamadaRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Não existe chamada com este id: " + id));
+			Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 
 		
 
@@ -135,19 +140,27 @@ public class ChamadaController {
 		chamada.setAluno(chamadaDetails.getAluno());
 		chamada.setTurma(chamadaDetails.getTurma());
 		chamada.setPresenca(chamadaDetails.getPresenca());
+		
+		
+		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
+		String formatado = formatoString.format(chamada.getId().getDt_chamada());
+		
+		
+		naturalId = "" + chamada.getId().getTurmaId() + chamada.getId().getAlunoId() + formatado;
+		
+		chamada.setNaturalId(naturalId);
 
 		Chamada chamadaAtualizada = chamadaRepository.save(chamada);
 
 		return ResponseEntity.ok(chamadaAtualizada);
 
 	}
-	*/
 	
-    /*
-	@DeleteMapping("/chamadas/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable ChamadaId id) {
-		Chamada chamada = chamadaRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Chamada não existe com este id: " + id));
+	
+    
+	@DeleteMapping("/chamadas/{naturalId}")
+	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable String naturalId) {
+		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 
 		chamadaRepository.delete(chamada);
 
@@ -156,5 +169,5 @@ public class ChamadaController {
 
 		return ResponseEntity.ok(response);
 	}
-	*/
+	
 }
