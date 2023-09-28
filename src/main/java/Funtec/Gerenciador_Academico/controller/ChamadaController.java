@@ -48,28 +48,38 @@ public class ChamadaController {
 		return chamadaRepository.findAll();
 	}
 	
+	
 	@GetMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public ResponseEntity<Chamada> getChamadaById(@PathVariable long idTurma,
 												  @PathVariable long idAluno,
-												  @PathVariable String dt_chamada) throws ParseException
+												  @PathVariable String dt_chamada) throws ParseException 
 	{
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		Date data = formatter.parse(dt_chamada);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy:HH:mm:ss");
+		Date data = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss").parse(dt_chamada);
+		String formatado = formatter.format(dt_chamada);
+		
+		System.out.println("\n\n\n DATA NAO FORMATADA: " + formatado + "\n\n\n");
 		
 		ChamadaId chamadaId = new ChamadaId();
 		chamadaId.setTurmaId(idTurma);
 		chamadaId.setAlunoId(idAluno);
-		chamadaId.setDt_chamada(data);
+		//chamadaId.setDt_chamada(dt_chamada);
 		
-		Chamada chamada = chamadaRepository.findById(chamadaId).orElseThrow(() -> new ResourceNotFoundException("nao foi possivel encontrar id: " + chamadaId));
+		
+		String naturalId = "" + idTurma + idAluno + formatado;
+		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n");
+	
+		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 		
 		return ResponseEntity.ok(chamada);
 	}
+	
 
 	@PostMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public Chamada cadastrarChamada(@PathVariable long idTurma,
 									@PathVariable long idAluno,
-									@PathVariable("dt_chamada") Date dt_chamada,
+									@PathVariable Date dt_chamada,
 									@RequestBody Chamada chamadaBody)  
 	{
 		Turma turma = turmaRepository.findById(idTurma)
@@ -93,6 +103,16 @@ public class ChamadaController {
 		chamada.setAluno(aluno);
 		chamada.setTurma(turma);
 		chamada.setPresenca(chamadaBody.getPresenca());
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy:HH:mm");
+		
+		
+		String formatado = formatter.format(dt_chamada);
+		String naturalId = "" + chamada.getId().getTurmaId() + chamada.getId().getAlunoId() + formatado;
+		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n");
+		chamada.setNaturalId(naturalId);
+		
+
 		return chamadaRepository.save(chamada);
 
 	}

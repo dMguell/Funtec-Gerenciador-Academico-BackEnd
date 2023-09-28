@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import Funtec.Gerenciador_Academico.model.Chamada;
 import Funtec.Gerenciador_Academico.model.ChamadaId;
 
-public interface ChamadaRepository extends JpaRepository<Chamada, ChamadaId>{
+public interface ChamadaRepository extends JpaRepository<Chamada, String>{
+	
+	Chamada findBynaturalId(String naturalId);
 	
 }

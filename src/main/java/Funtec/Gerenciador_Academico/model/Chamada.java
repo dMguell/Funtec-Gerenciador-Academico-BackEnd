@@ -25,6 +25,17 @@ public class Chamada {
 	
 	@Column(name = "presenca")
 	private Integer presenca;
+	
+	@Column(name = "naturalId")
+	private String naturalId;
+	
+	public String getNaturalId() {
+		return naturalId;
+	}
+
+	public void setNaturalId(String naturalId) {
+		this.naturalId = naturalId;
+	}
 
 	public Integer getPresenca() {
 		return presenca;
