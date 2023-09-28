@@ -29,7 +29,7 @@ public class Turma {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Curso curso;
 
-	@OneToMany(mappedBy = "turma", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "turma")
 	@JsonIgnore
 	private List<Chamada> alunos = new ArrayList<Chamada>();
 
