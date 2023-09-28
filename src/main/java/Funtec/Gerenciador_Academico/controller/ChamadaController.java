@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,20 +48,30 @@ public class ChamadaController {
 		return chamadaRepository.findAll();
 	}
 	
-	@GetMapping("/chamadas/{id}")
-	public ResponseEntity<Chamada> getChamadaById(@PathVariable Long id)
+	@GetMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
+	public ResponseEntity<Chamada> getChamadaById(@PathVariable long idTurma,
+												  @PathVariable long idAluno,
+												  @PathVariable String dt_chamada) throws ParseException
 	{
-		Chamada chamada = chamadaRepository.findById(id)
-							.orElseThrow(() -> new ResourceNotFoundException("Chamada não existe com este id: " + id));
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		Date data = formatter.parse(dt_chamada);
+		
+		ChamadaId chamadaId = new ChamadaId();
+		chamadaId.setTurmaId(idTurma);
+		chamadaId.setAlunoId(idAluno);
+		chamadaId.setDt_chamada(data);
+		
+		Chamada chamada = chamadaRepository.findById(chamadaId).orElseThrow(() -> new ResourceNotFoundException("nao foi possivel encontrar id: " + chamadaId));
 		
 		return ResponseEntity.ok(chamada);
 	}
 
 	@PostMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public Chamada cadastrarChamada(@PathVariable long idTurma,
-			@PathVariable long idAluno,
-			@PathVariable String dt_chamada,
-			@RequestBody Chamada chamadaBody) throws ParseException {
+									@PathVariable long idAluno,
+									@PathVariable("dt_chamada") Date dt_chamada,
+									@RequestBody Chamada chamadaBody)  
+	{
 		Turma turma = turmaRepository.findById(idTurma)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi possível encontrar a turma com este id"));
 
@@ -70,10 +81,11 @@ public class ChamadaController {
 		ChamadaId chamadaid = new ChamadaId();
 		chamadaid.setAlunoId(aluno.getId());
 		chamadaid.setTurmaId(turma.getId());
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
-		Date data = formatter.parse(dt_chamada);
-		chamadaid.setDt_chamada(data);
+		
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		//Date data = formatter.parse(dt_chamada);
+		
+		chamadaid.setDt_chamada(dt_chamada);
 
 		Chamada chamada = new Chamada();
 
@@ -85,10 +97,14 @@ public class ChamadaController {
 
 	}
 	
+	/*
 	@PutMapping("/chamadas/{id}")
-	public ResponseEntity<Chamada> updateCurso(@PathVariable Long id, @RequestBody Chamada chamadaDetails) {
-		Chamada chamada = chamadaRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("chamada não existe com este id: " + id));
+	public ResponseEntity<Chamada> updateCurso(@PathVariable ChamadaId id, @RequestBody Chamada chamadaDetails) {
+
+			Chamada chamada = chamadaRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Não existe chamada com este id: " + id));
+
+		
 
 		ChamadaId chamadaid = new ChamadaId();
 		chamadaid.setAlunoId(chamadaDetails.getAluno().getId());
@@ -105,9 +121,11 @@ public class ChamadaController {
 		return ResponseEntity.ok(chamadaAtualizada);
 
 	}
-
+	*/
+	
+    /*
 	@DeleteMapping("/chamadas/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable Long id) {
+	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable ChamadaId id) {
 		Chamada chamada = chamadaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Chamada não existe com este id: " + id));
 
@@ -118,4 +136,5 @@ public class ChamadaController {
 
 		return ResponseEntity.ok(response);
 	}
+	*/
 }
