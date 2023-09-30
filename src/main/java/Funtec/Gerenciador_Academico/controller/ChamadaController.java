@@ -3,14 +3,13 @@ package Funtec.Gerenciador_Academico.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Funtec.Gerenciador_Academico.Exception.ResourceNotFoundException;
@@ -30,8 +30,6 @@ import Funtec.Gerenciador_Academico.model.Turma;
 import Funtec.Gerenciador_Academico.repository.AlunoRepository;
 import Funtec.Gerenciador_Academico.repository.ChamadaRepository;
 import Funtec.Gerenciador_Academico.repository.TurmaRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -62,13 +60,13 @@ public class ChamadaController {
 	{
 		String dataSpliced = dt_chamada.substring(0,19);
 	
-		DateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+		DateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
 		
 		Date data = new Date();
-		data = formato.parse(dataSpliced);
+		data = formatoData.parse(dataSpliced);
 		
-		String teste = formatoString.format(data);
+		String stringData = formatoString.format(data);
 		
 		ChamadaId chamadaId = new ChamadaId();
 		chamadaId.setTurmaId(idTurma);
@@ -77,21 +75,88 @@ public class ChamadaController {
 		
 		
 		
-		String naturalId = "" + idTurma + idAluno + teste;
-		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n DATA: " + teste + "\n\n\n");
+		String naturalId = "" + idTurma + idAluno + stringData;
+		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n DATA: " + stringData + "\n\n\n");
 	
 		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 		
 		return ResponseEntity.ok(chamada);
 	}
 	
+	@GetMapping("/chamadas/teste")
+	public List<Long> teste(@RequestParam List<Long> values)
+	{
+		List<Long> aqui = new ArrayList<Long>();
+		values.forEach(a -> {
+			aqui.add(a);
+		});
+		
+		return aqui;
+	}
+	
+	@PostMapping("/chamadas/{idTurma}/{dt_chamada}/")
+	public List<Chamada> cadastrarListaChamada(@PathVariable long idTurma,
+											   @PathVariable Date dt_chamada,
+											   @RequestParam List<Long> idAlunos,
+											   @RequestBody List<Chamada> chamadaBody) throws ParseException
+	{
+		
+		List<String> naturalsId = new ArrayList<String>();
+		List<Chamada> chamadas = new ArrayList<Chamada>();
+		List<ChamadaId> chamadasId = new ArrayList<ChamadaId>();
+		
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		
+		String formatado = formatter.format(dt_chamada);
+		
+		
+		Turma turma = turmaRepository.findById(idTurma)
+				.orElseThrow(() -> new ResourceNotFoundException("não foi possível encontrar a turma com este id"));
+		
+		List<Aluno> alunos = alunoRepository.findAllById(idAlunos);
+		
 
+		for (int i = 0;i < alunos.size();i++)
+		{
+			ChamadaId chamadaId = new ChamadaId();
+			chamadaId.setTurmaId(turma.getId());
+			chamadaId.setDt_chamada(dt_chamada);
+			chamadaId.setAlunoId(alunos.get(i).getId());
+			
+			naturalsId.add(i, "" + turma.getId() + alunos.get(i).getId() + formatado);
+				
+			chamadasId.add(i, chamadaId);
+		}
+		
+		for (int i = 0; i< alunos.size(); i++)
+		{
+			Chamada chamada = new Chamada();
+			
+			chamada.setId(chamadasId.get(i));
+			chamada.setAluno(alunos.get(i));
+			chamada.setTurma(turma);
+			chamada.setNaturalId(naturalsId.get(i));
+			chamada.setPresenca(chamadaBody.get(i).getPresenca());
+			
+			chamadas.add(chamada);
+		}
+		
+		
+		
+		
+		return chamadaRepository.saveAll(chamadas);
+	}
+	
+	
+ 
 	@PostMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public Chamada cadastrarChamada(@PathVariable long idTurma,
 									@PathVariable long idAluno,
 									@PathVariable Date dt_chamada,
 									@RequestBody Chamada chamadaBody)  
 	{
+		
 		Turma turma = turmaRepository.findById(idTurma)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi possível encontrar a turma com este id"));
 
@@ -121,6 +186,7 @@ public class ChamadaController {
 		String naturalId = "" + chamada.getId().getTurmaId() + chamada.getId().getAlunoId() + formatado;
 		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n");
 		chamada.setNaturalId(naturalId);
+		
 		
 
 		return chamadaRepository.save(chamada);
@@ -162,6 +228,7 @@ public class ChamadaController {
     
 	@DeleteMapping("/chamadas/{naturalId}")
 	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable String naturalId) {
+		
 		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
 
 		chamadaRepository.delete(chamada);

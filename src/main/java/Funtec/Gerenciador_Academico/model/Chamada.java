@@ -1,5 +1,7 @@
 package Funtec.Gerenciador_Academico.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -24,12 +26,25 @@ public class Chamada {
 	@MapsId("alunoId")
 	private Aluno aluno;
 	
+
+	
 	@Column(name = "presenca")
 	private Integer presenca;
 	
 	@Column(name = "naturalId")
 	private String naturalId;
 	
+	@Column(name = "cadastro")
+	private Boolean cadastro;
+
+	public Boolean getCadastro() {
+		return cadastro;
+	}
+
+	public void setCadastro(Boolean cadastro) {
+		this.cadastro = cadastro;
+	}
+
 	public String getNaturalId() {
 		return naturalId;
 	}
