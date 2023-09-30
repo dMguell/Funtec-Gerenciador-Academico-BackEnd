@@ -30,9 +30,10 @@ import Funtec.Gerenciador_Academico.model.Turma;
 import Funtec.Gerenciador_Academico.repository.AlunoRepository;
 import Funtec.Gerenciador_Academico.repository.ChamadaRepository;
 import Funtec.Gerenciador_Academico.repository.TurmaRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
-@Transactional
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
@@ -53,7 +54,7 @@ public class ChamadaController {
 	}
 	
 	
-	@Transactional
+
 	@GetMapping("/chamadas/{idTurma}/{idAluno}/{dt_chamada}")
 	public ResponseEntity<Chamada> getChamadaById(@PathVariable long idTurma,
 												  @PathVariable long idAluno,
@@ -126,13 +127,11 @@ public class ChamadaController {
 
 	}
 	
-	@Transactional
+
 	@PutMapping("/chamadas/{naturalId}")
 	public ResponseEntity<Chamada> updateCurso(@PathVariable String naturalId, @RequestBody Chamada chamadaDetails) {
 
 			Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
-
-		
 
 		ChamadaId chamadaid = new ChamadaId();
 		chamadaid.setAlunoId(chamadaDetails.getAluno().getId());

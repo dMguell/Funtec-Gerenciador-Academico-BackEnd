@@ -1,5 +1,6 @@
 package Funtec.Gerenciador_Academico.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -15,11 +16,11 @@ public class Chamada {
 	@EmbeddedId
 	private ChamadaId id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@MapsId("turmaId")
 	private Turma turma;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@MapsId("alunoId")
 	private Aluno aluno;
 	

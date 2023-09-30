@@ -32,7 +32,7 @@ public class Aluno {
 	@Column(name = "dt_nascimento")
 	private Date dt_nascimento;
 	
-	@OneToMany(mappedBy = "aluno")
+	@OneToMany(mappedBy = "aluno", cascade = CascadeType.MERGE)
 	@JsonIgnore
 	private List<Chamada> turmas = new ArrayList<Chamada>();
 	
