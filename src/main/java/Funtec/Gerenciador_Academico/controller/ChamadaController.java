@@ -247,7 +247,8 @@ public class ChamadaController {
 	
 
 	@PutMapping("/chamadas/{naturalId}")
-	public ResponseEntity<Chamada> updateCurso(@PathVariable String naturalId, @RequestBody Chamada chamadaDetails) {
+	public ResponseEntity<Chamada> updateCurso(@PathVariable String naturalId, @RequestBody Chamada chamadaDetails) 
+	{
 
 			Chamada chamada = chamadaRepository.findByNaturalId(naturalId);
 
@@ -280,7 +281,8 @@ public class ChamadaController {
 	
     
 	@DeleteMapping("/chamadas/{naturalId}")
-	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable String naturalId) {
+	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable String naturalId) 
+	{
 		
 		Chamada chamada = chamadaRepository.findByNaturalId(naturalId);
 		

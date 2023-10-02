@@ -55,7 +55,9 @@ public class TurmaController {
 	@PostMapping("/turmas/{idCurso}/{idProfessor}")
 	public Turma cadastrarTurma(@PathVariable long idCurso,
 								@PathVariable long idProfessor,
-								@RequestBody Turma turmaDetails) {
+								@RequestBody Turma turmaDetails) 
+	{
+		
 		Curso curso = cursoRepository.findById(idCurso)
 				.orElseThrow(() -> new ResourceNotFoundException("não foi encontrado curso com este id"));
 
@@ -78,6 +80,7 @@ public class TurmaController {
 		turma.setAlunos(turmaDetails.getAlunos());
 		turma.setCurso(turmaDetails.getCurso());
 		turma.setProfessor(turmaDetails.getProfessor());
+		turma.setNome_turma(turmaDetails.getNome_turma());
 
 		Turma turmaAtualizada = turmaRepository.save(turma);
 
