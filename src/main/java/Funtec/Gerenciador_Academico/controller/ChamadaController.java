@@ -58,13 +58,13 @@ public class ChamadaController {
 												  @PathVariable long idAluno,
 												  @PathVariable String dt_chamada) throws ParseException 
 	{
-		String dataSpliced = dt_chamada.substring(0,19);
+
 	
 		DateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
 		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
 		
 		Date data = new Date();
-		data = formatoData.parse(dataSpliced);
+		data = formatoData.parse(dt_chamada);
 		
 		String stringData = formatoString.format(data);
 		
