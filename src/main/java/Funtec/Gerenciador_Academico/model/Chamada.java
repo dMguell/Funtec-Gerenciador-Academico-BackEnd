@@ -1,6 +1,5 @@
 package Funtec.Gerenciador_Academico.model;
 
-import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

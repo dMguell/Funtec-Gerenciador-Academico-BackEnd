@@ -60,8 +60,8 @@ public class ChamadaController {
 	{
 		String dataSpliced = dt_chamada.substring(0,19);
 	
-		DateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
+		DateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
+		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
 		
 		Date data = new Date();
 		data = formatoData.parse(dataSpliced);
@@ -131,12 +131,11 @@ public class ChamadaController {
 		});
 		
 		DateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
-		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
 		
 		Date data = new Date();
 		data = formatoData.parse(dt_chamada);
 		
-		String stringData = formatoString.format(data);
+		String stringData = formatoData.format(data);
 	
 		
 		List<String> naturalsId = new ArrayList<String>();
@@ -232,7 +231,7 @@ public class ChamadaController {
 		chamada.setTurma(turma);
 		chamada.setPresenca(chamadaBody.getPresenca());
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
 		
 		
 		String formatado = formatter.format(dt_chamada);
@@ -264,7 +263,7 @@ public class ChamadaController {
 		chamada.setPresenca(chamadaDetails.getPresenca());
 		
 		
-		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
+		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
 		String formatado = formatoString.format(chamada.getId().getDt_chamada());
 		
 		
