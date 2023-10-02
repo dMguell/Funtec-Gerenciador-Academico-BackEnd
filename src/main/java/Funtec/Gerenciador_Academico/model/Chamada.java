@@ -26,8 +26,6 @@ public class Chamada {
 	@MapsId("alunoId")
 	private Aluno aluno;
 	
-
-	
 	@Column(name = "presenca")
 	private Integer presenca;
 	

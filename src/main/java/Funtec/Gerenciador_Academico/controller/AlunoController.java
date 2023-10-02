@@ -1,5 +1,6 @@
 package Funtec.Gerenciador_Academico.controller;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Funtec.Gerenciador_Academico.Exception.ResourceNotFoundException;
 import Funtec.Gerenciador_Academico.model.Aluno;
+
 import Funtec.Gerenciador_Academico.repository.AlunoRepository;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -27,6 +30,7 @@ public class AlunoController {
 	
 	@Autowired
 	AlunoRepository alunoRepository;
+	
 	
 	@GetMapping("/alunos")
 	public List<Aluno> getAllAlunos()

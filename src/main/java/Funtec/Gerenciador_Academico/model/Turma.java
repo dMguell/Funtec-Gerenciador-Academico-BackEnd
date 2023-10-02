@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,17 @@ public class Turma {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Curso curso;
+	
+	@Column(name = "nome_turma")
+	private String nome_turma;
+	
+	public String getNome_turma() {
+		return nome_turma;
+	}
+
+	public void setNome_turma(String nome_turma) {
+		this.nome_turma = nome_turma;
+	}
 
 	@OneToMany(mappedBy = "turma")
 	@JsonIgnore

@@ -77,10 +77,34 @@ public class ChamadaController {
 		
 		String naturalId = "" + idTurma + idAluno + stringData;
 		System.out.println("\n\n\n NATURAL ID: " + naturalId + "\n\n\n DATA: " + stringData + "\n\n\n");
-	
-		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
+		
+		Chamada chamada = chamadaRepository.findByNaturalId(naturalId);
+
 		
 		return ResponseEntity.ok(chamada);
+	}
+	
+	@GetMapping("/chamadas/cadastrados")
+	public List<Chamada> getChamadaCadastrados()
+	{
+		return chamadaRepository.findAllSortedByCadastro();
+	}
+	
+	@GetMapping("/chamadas/{idTurma}/cadastrados")
+	public List<Chamada> getChamadaCadastradosByTurma(@PathVariable long idTurma)
+	{
+		List<Chamada> retorno = new ArrayList<Chamada>();
+		List<Chamada> cadastrados = chamadaRepository.findAllSortedByCadastro();
+		
+		for(int i = 0; i < cadastrados.size(); i++)
+		{
+			if (cadastrados.get(i).getTurma().getId() == idTurma)
+			{
+				retorno.add(cadastrados.get(i));
+			}
+		}
+		
+		return retorno;
 	}
 	
 	@GetMapping("/chamadas/teste")
@@ -96,19 +120,28 @@ public class ChamadaController {
 	
 	@PostMapping("/chamadas/{idTurma}/{dt_chamada}/")
 	public List<Chamada> cadastrarListaChamada(@PathVariable long idTurma,
-											   @PathVariable Date dt_chamada,
+											   @PathVariable String dt_chamada,
 											   @RequestParam List<Long> idAlunos,
 											   @RequestBody List<Chamada> chamadaBody) throws ParseException
 	{
 		
+		System.out.println("\n\n\n LISTA ID ALUNOS ");
+		idAlunos.forEach(a ->{
+			System.out.println("ID alunos: " + a);
+		});
+		
+		DateFormat formatoData = new SimpleDateFormat("dd-MM-yyyy:HH:mm");
+		DateFormat formatoString = new SimpleDateFormat("dd-MM-yyyy");
+		
+		Date data = new Date();
+		data = formatoData.parse(dt_chamada);
+		
+		String stringData = formatoString.format(data);
+	
+		
 		List<String> naturalsId = new ArrayList<String>();
 		List<Chamada> chamadas = new ArrayList<Chamada>();
 		List<ChamadaId> chamadasId = new ArrayList<ChamadaId>();
-		
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		
-		String formatado = formatter.format(dt_chamada);
 		
 		
 		Turma turma = turmaRepository.findById(idTurma)
@@ -121,29 +154,49 @@ public class ChamadaController {
 		{
 			ChamadaId chamadaId = new ChamadaId();
 			chamadaId.setTurmaId(turma.getId());
-			chamadaId.setDt_chamada(dt_chamada);
+			chamadaId.setDt_chamada(data);
 			chamadaId.setAlunoId(alunos.get(i).getId());
 			
-			naturalsId.add(i, "" + turma.getId() + alunos.get(i).getId() + formatado);
+			naturalsId.add(i, "" + turma.getId() + alunos.get(i).getId() + stringData);
 				
 			chamadasId.add(i, chamadaId);
 		}
 		
-		for (int i = 0; i< alunos.size(); i++)
+		// CASO SEJA O PRIMEIRO CADASTRO -----------------
+		if (chamadaBody.get(0).getCadastro())
 		{
-			Chamada chamada = new Chamada();
-			
-			chamada.setId(chamadasId.get(i));
-			chamada.setAluno(alunos.get(i));
-			chamada.setTurma(turma);
-			chamada.setNaturalId(naturalsId.get(i));
-			chamada.setPresenca(chamadaBody.get(i).getPresenca());
-			
-			chamadas.add(chamada);
+			for (int i = 0; i< alunos.size(); i++)
+			{
+				Chamada chamada = new Chamada();
+				
+				chamada.setId(chamadasId.get(i));
+				chamada.setAluno(alunos.get(i));
+				chamada.setTurma(turma);
+				
+				chamada.setNaturalId(naturalsId.get(i).toString() + "C");
+				chamada.setCadastro(chamadaBody.get(i).getCadastro());
+				
+				chamadas.add(chamada);
+			}
+		} 
+		
+		// CASO SEJA O UMA CHAMADA DE ALUNOS JA CADASTRADOS -----------------
+		else
+		{
+			for (int i = 0; i< alunos.size(); i++)
+			{
+				Chamada chamada = new Chamada();
+				
+				chamada.setId(chamadasId.get(i));
+				chamada.setAluno(alunos.get(i));
+				chamada.setTurma(turma);
+				chamada.setNaturalId(naturalsId.get(i));
+				chamada.setPresenca(chamadaBody.get(i).getPresenca());
+				
+				chamadas.add(chamada);
+			}
 		}
-		
-		
-		
+
 		
 		return chamadaRepository.saveAll(chamadas);
 	}
@@ -197,8 +250,9 @@ public class ChamadaController {
 	@PutMapping("/chamadas/{naturalId}")
 	public ResponseEntity<Chamada> updateCurso(@PathVariable String naturalId, @RequestBody Chamada chamadaDetails) {
 
-			Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
+			Chamada chamada = chamadaRepository.findByNaturalId(naturalId);
 
+			
 		ChamadaId chamadaid = new ChamadaId();
 		chamadaid.setAlunoId(chamadaDetails.getAluno().getId());
 		chamadaid.setTurmaId(chamadaDetails.getTurma().getId());
@@ -229,8 +283,8 @@ public class ChamadaController {
 	@DeleteMapping("/chamadas/{naturalId}")
 	public ResponseEntity<Map<String, Boolean>> deleteChamada(@PathVariable String naturalId) {
 		
-		Chamada chamada = chamadaRepository.findBynaturalId(naturalId);
-
+		Chamada chamada = chamadaRepository.findByNaturalId(naturalId);
+		
 		chamadaRepository.delete(chamada);
 
 		Map<String, Boolean> response = new HashMap<String, Boolean>();
