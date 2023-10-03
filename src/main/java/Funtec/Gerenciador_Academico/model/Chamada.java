@@ -17,11 +17,11 @@ public class Chamada {
 	@EmbeddedId
 	private ChamadaId id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	@MapsId("turmaId")
 	private Turma turma;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	@MapsId("alunoId")
 	private Aluno aluno;
 	

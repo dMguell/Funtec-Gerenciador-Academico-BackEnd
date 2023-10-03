@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,19 +25,17 @@ public class Aluno {
 
 	@Column(name = "nome_aluno")
 	private String nome;
-
+	
 	@Column(name = "cpf")
 	private String cpf;
 
 	@Column(name = "dt_nascimento")
 	private Date dt_nascimento;
 	
-	@OneToMany(mappedBy = "aluno")
+	@OneToMany(mappedBy = "aluno", cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	@JsonIgnore
 	private List<Chamada> turmas = new ArrayList<Chamada>();
 	
-	
-
 	public List<Chamada> getTurmas() {
 		return turmas;
 	}

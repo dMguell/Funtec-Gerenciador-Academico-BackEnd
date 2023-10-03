@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,10 +24,10 @@ public class Turma {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private Professor professor;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private Curso curso;
 	
 	@Column(name = "nome_turma")
@@ -40,7 +41,7 @@ public class Turma {
 		this.nome_turma = nome_turma;
 	}
 
-	@OneToMany(mappedBy = "turma")
+	@OneToMany(mappedBy = "turma", cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	@JsonIgnore
 	private List<Chamada> alunos = new ArrayList<Chamada>();
 
