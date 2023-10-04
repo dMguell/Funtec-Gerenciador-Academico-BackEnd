@@ -23,4 +23,7 @@ public interface ChamadaRepository extends JpaRepository<Chamada, String>{
 	@Query( value = "SELECT c from Chamada c WHERE c.cadastro = false")
 	List<Chamada> findAllSortedByCadastroFalse();
 	
+	@Query( value = "SELECT c from Chamada c WHERE c.aluno.id = ?1")
+	List<Chamada> findAllByAluno(long idaluno);
+	
 }

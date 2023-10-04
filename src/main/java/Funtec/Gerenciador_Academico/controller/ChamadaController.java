@@ -294,4 +294,16 @@ public class ChamadaController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@GetMapping("/chamadas/aluno/{idAluno}")
+	public List<Chamada> getChamadaByAluno(@PathVariable long idAluno)
+	{
+		List<Chamada> chamada = new ArrayList<Chamada>();
+		
+		chamada = chamadaRepository.findAllByAluno(idAluno);
+		
+
+		
+		return chamada;
+	}
+	
 }
