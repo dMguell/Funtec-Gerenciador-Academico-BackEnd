@@ -19,6 +19,8 @@ import jakarta.persistence.Table;
 @Table(name = "Alunos")
 public class Aluno {
 
+	private int a;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
